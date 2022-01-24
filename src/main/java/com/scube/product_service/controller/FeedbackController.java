@@ -4,6 +4,10 @@ import com.scube.product_service.payload.FeedbackDto;
 import com.scube.product_service.payload.ProductDto;
 import com.scube.product_service.service.FeedbackService;
 import com.scube.product_service.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +53,19 @@ public class FeedbackController {
         return new ResponseEntity<>(feedbackDtoResponse, HttpStatus.OK);
 
     }
+
+    @Operation(summary = "This is to fetch unique feedback stored in Db for a unique product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Fetched unique feedback form Db for a unique product",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "Feedback not found with id : feedbackId",
+                    content = @Content),
+            @ApiResponse(responseCode = "500",
+                    description = "Feedback is not from this product",
+                    content = @Content)
+    })
 
     @GetMapping("/products/{productId}/feedbacks/{feedbackId}")
     public ResponseEntity<FeedbackDto> getFeedbackById(@PathVariable("productId") long productId,

@@ -5,6 +5,10 @@ import com.scube.product_service.payload.ProductDto;
 import com.scube.product_service.payload.ProductResponse;
 import com.scube.product_service.service.ProductService;
 import com.scube.product_service.utils.ProductPageConstraints;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +34,17 @@ public class ProductController {
         return productService.createProduct(categoryId, productDto);
     }
 
+
+
+    @Operation(summary = "This is to fetch All the Products stored in Db by CategoryId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Fetched All the Products form Db by CategoryId",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "NOt Available",
+                    content = @Content)
+    })
     @GetMapping("/categories/{categoryId}/products")
     public List<ProductDto> getAllProductByCategoryId(@PathVariable("categoryId") long categoryId) {
 
@@ -46,6 +61,16 @@ public class ProductController {
 //        return productService.getAllProduct();
 //    }
 
+    @Operation(summary = "This is to fetch All the Products stored in Db")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Fetched All the Products form Db",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "NOt Available",
+                    content = @Content)
+    })
+
     //get All products rest api
     @GetMapping("/products")
     public ProductResponse getAllProduct(@RequestParam(value = "pageNo",defaultValue = ProductPageConstraints.DEFAULT_PAGE_NUMBER,required = false) int  pageNo,
@@ -56,6 +81,7 @@ public class ProductController {
 
         return productService.getAllProduct(pageNo,pageSize,sortBy,sortDir);
     }
+
 
     @GetMapping("/categories/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("categoryId") long categoryId,
