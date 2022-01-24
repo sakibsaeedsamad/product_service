@@ -4,53 +4,55 @@ import com.scube.product_service.payload.CategoryDto;
 import com.scube.product_service.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 @Slf4j
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
     @PostMapping
-    public CategoryDto saveCategory(@RequestBody CategoryDto categoryDto){
+    public CategoryDto saveCategory(@RequestBody CategoryDto categoryDto) {
         log.info("Inside the saveCategory Controller");
         return categoryService.saveCategory(categoryDto);
     }
 
     @GetMapping
-    public List<CategoryDto> getAllCategory(){
+    public List<CategoryDto> getAllCategory() {
         log.info("Inside the getAllCategory Controller");
-        return  categoryService.getAllCategory();
+        return categoryService.getAllCategory();
     }
 
     @GetMapping("/{id}")
-    public  CategoryDto findCategoryById(@PathVariable (value = "id") Long categoryId){
-
+    public ResponseEntity<CategoryDto> findCategoryById(@PathVariable(name = "id") long categoryId) {
         log.info("Inside the findCategoryById Controller");
-
-        return  categoryService.findCategoryById(categoryId);
+        CategoryDto categoryDtoResponse = categoryService.findCategoryById(categoryId);
+        return new ResponseEntity<>(categoryDtoResponse, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public CategoryDto updateCategoryById(@PathVariable (value = "id") Long categoryId, @RequestBody CategoryDto categoryDto){
+    public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable(name = "id") long categoryId, @RequestBody CategoryDto categoryDto) {
         log.info("Inside the updateCategoryById Controller");
-        return categoryService.updateCategoryById(categoryId,categoryDto);
+        CategoryDto categoryDtoResponse =  categoryService.updateCategoryById(categoryId, categoryDto);
+
+        return new ResponseEntity<>(categoryDtoResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCategoryById(@PathVariable (value = "id") Long categoryId ){
+    public ResponseEntity<String> deleteCategoryById(@PathVariable(name = "id") long categoryId) {
 
         log.info("Inside the deleteCategoryById Controller");
 
         categoryService.deleteCategoryById(categoryId);
 
-        return "Category Deleted Successfully";
+        return new ResponseEntity<>("Category Deleted Successfully", HttpStatus.OK);
     }
-
 
 
 }

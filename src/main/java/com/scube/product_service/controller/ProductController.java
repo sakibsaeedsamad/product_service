@@ -2,7 +2,9 @@ package com.scube.product_service.controller;
 
 
 import com.scube.product_service.payload.ProductDto;
+import com.scube.product_service.payload.ProductResponse;
 import com.scube.product_service.service.ProductService;
+import com.scube.product_service.utils.ProductPageConstraints;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,8 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @PostMapping("/category/{categoryId}/product")
-    public ProductDto createProduct(@PathVariable("categoryId") Long categoryId,
+    @PostMapping("/categories/{categoryId}/products")
+    public ProductDto createProduct(@PathVariable("categoryId") long categoryId,
                                     @RequestBody ProductDto productDto) {
 
         log.info("Inside the createProduct Controller");
@@ -28,52 +30,69 @@ public class ProductController {
         return productService.createProduct(categoryId, productDto);
     }
 
-    @GetMapping("/category/{categoryId}/product")
-    public List<ProductDto> getAllProductByCategoryId(@PathVariable("categoryId") Long categoryId) {
+    @GetMapping("/categories/{categoryId}/products")
+    public List<ProductDto> getAllProductByCategoryId(@PathVariable("categoryId") long categoryId) {
 
         log.info("Inside the getAllProductByCategoryId Controller");
 
         return productService.getAllProductByCategoryId(categoryId);
     }
 
-    @GetMapping("/product")
-    public List<ProductDto> getAllProduct() {
+//    @GetMapping("/products")
+//    public List<ProductDto> getAllProduct() {
+//
+//        log.info("Inside the getAllProduct Controller");
+//
+//        return productService.getAllProduct();
+//    }
 
+    //get All products rest api
+    @GetMapping("/products")
+    public ProductResponse getAllProduct(@RequestParam(value = "pageNo",defaultValue = ProductPageConstraints.DEFAULT_PAGE_NUMBER,required = false) int  pageNo,
+                                         @RequestParam(value = "pageSize",defaultValue = ProductPageConstraints.DEFAULT_PAGE_SIZE,required = false) int  pageSize,
+                                         @RequestParam(value = "sortBy",defaultValue = ProductPageConstraints.DEFAULT_PAGE_SORT_BY,required = false) String  sortBy,
+                                         @RequestParam(value = "sortDir",defaultValue = ProductPageConstraints.DEFAULT_SORT_DIR,required = false) String  sortDir){
         log.info("Inside the getAllProduct Controller");
 
-        return productService.getAllProduct();
+        return productService.getAllProduct(pageNo,pageSize,sortBy,sortDir);
     }
 
-    @GetMapping("/category/{categoryId}/product/{productId}")
-    public ProductDto getProductById(@PathVariable("categoryId") Long categoryId,
-                                     @PathVariable("productId") Long productId) {
+    @GetMapping("/categories/{categoryId}/products/{productId}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("categoryId") long categoryId,
+                                     @PathVariable("productId") long productId) {
 
         log.info("Inside the getProductById Controller");
 
-        return productService.getProductById(categoryId,productId);
+
+        ProductDto productDtoResponse =  productService.getProductById(categoryId,productId);
+
+        return new ResponseEntity<>(productDtoResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/category/{categoryId}/product/{productId}")
-    public ProductDto updateProduct(@PathVariable("categoryId") Long categoryId,
-                                                    @PathVariable("productId") Long productId,
+    @PutMapping("/categories/{categoryId}/products/{productId}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable("categoryId") long categoryId,
+                                                    @PathVariable("productId") long productId,
                                                     @RequestBody ProductDto productDto) {
 
         log.info("Inside the updateProduct Controller");
 
-        return productService.updateProduct(categoryId, productId, productDto);
+        ProductDto productDtoResponse =  productService.updateProduct(categoryId, productId, productDto);
+
+        return new ResponseEntity<>(productDtoResponse, HttpStatus.OK);
 
     }
 
 
 
-    @DeleteMapping("/category/{categoryId}/product/{productId}")
-    public String deleteProduct(@PathVariable("categoryId") Long categoryId,
+    @DeleteMapping("/categories/{categoryId}/products/{productId}")
+    public ResponseEntity<String> deleteProduct(@PathVariable("categoryId") long categoryId,
                                     @PathVariable("productId") Long productId) {
 
         log.info("Inside the deleteProduct Controller");
 
         productService.deleteProduct(categoryId, productId);
-        return "Product Deleted Successfully";
+
+        return new ResponseEntity<>("Product Deleted Successfully", HttpStatus.OK);
 
     }
 

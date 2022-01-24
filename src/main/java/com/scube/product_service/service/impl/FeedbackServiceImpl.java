@@ -1,13 +1,10 @@
 package com.scube.product_service.service.impl;
 
-import com.scube.product_service.entity.Category;
 import com.scube.product_service.entity.Feedback;
 import com.scube.product_service.entity.Product;
 import com.scube.product_service.exception.ProductServiceException;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.FeedbackDto;
-import com.scube.product_service.payload.ProductDto;
-import com.scube.product_service.repository.CategoryRepository;
 import com.scube.product_service.repository.FeedbackRepository;
 import com.scube.product_service.repository.ProductRepository;
 import com.scube.product_service.service.FeedbackService;
@@ -23,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class FeedbackServiceimpl implements FeedbackService {
+public class FeedbackServiceImpl implements FeedbackService {
 
     @Autowired
     ProductRepository productRepository;
@@ -45,7 +42,7 @@ public class FeedbackServiceimpl implements FeedbackService {
         //save feedback to db
         Feedback feedback1 = feedbackRepository.save(feedback);
 
-        log.info("Inside createFeedback of CategoryService");
+        log.info("Inside createFeedback of FeedbackService");
 
         return mapToFeedbackDto(feedback1);
     }
@@ -55,11 +52,27 @@ public class FeedbackServiceimpl implements FeedbackService {
         //retrive feedback by productId
         List<Feedback> feedbacks = feedbackRepository.findByproductId(productId);
 
-        log.info("Inside getAllFeedbackByProductId of CategoryService");
+        log.info("Inside getAllFeedbackByProductId of FeedbackService");
 
         //convert list of feedback entities to list of feedbackDto
         return feedbacks.stream().map(feedback ->
                 mapToFeedbackDto(feedback)).collect(Collectors.toList());
+    }
+
+    @Override
+    public FeedbackDto getFeedbackById(long productId, long feedbackId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
+
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(()-> new ResourceNotFoundException("Feedback","id",feedbackId));
+
+        if (feedback.getProduct().getProductId() != (product.getProductId())){
+            throw new ProductServiceException(HttpStatus.BAD_REQUEST,"Feedback is not from this product");
+        }
+
+        log.info("Inside getFeedbackById of FeedbackService");
+        return mapToFeedbackDto(feedback);
     }
 
     @Override
@@ -81,7 +94,7 @@ public class FeedbackServiceimpl implements FeedbackService {
 
         Feedback feedback1 = feedbackRepository.save(feedback);
 
-        log.info("Inside updateFeedbackById of CategoryService");
+        log.info("Inside updateFeedbackById of FeedbackService");
 
         return mapToFeedbackDto(feedback1);
     }
@@ -98,7 +111,7 @@ public class FeedbackServiceimpl implements FeedbackService {
             throw new ProductServiceException(HttpStatus.BAD_REQUEST,"Feedback is not from this product");
         }
 
-        log.info("Inside deleteFeedbackById of CategoryService");
+        log.info("Inside deleteFeedbackById of FeedbackService");
 
         feedbackRepository.delete(feedback);
     }

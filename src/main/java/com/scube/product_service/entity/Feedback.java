@@ -19,10 +19,15 @@ public class Feedback {
             initialValue = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = GenerationType.AUTO,
             generator = "feedbackId"
     )
-    private Long feedbackId;
+//@Id
+//@GeneratedValue(
+//        strategy = GenerationType.IDENTITY,
+//        generator = "feedbackId"
+//)
+    private long feedbackId;
     @Column(nullable = false)
     private String feedbackRating;
     @Column(nullable = false)

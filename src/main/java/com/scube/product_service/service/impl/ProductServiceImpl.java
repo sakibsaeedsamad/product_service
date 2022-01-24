@@ -5,11 +5,16 @@ import com.scube.product_service.entity.Product;
 import com.scube.product_service.exception.ProductServiceException;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.ProductDto;
+import com.scube.product_service.payload.ProductResponse;
 import com.scube.product_service.repository.CategoryRepository;
 import com.scube.product_service.repository.ProductRepository;
 import com.scube.product_service.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         //save Product to db
         Product newProduct = productRepository.save(product);
 
-        log.info("Inside createProduct of CategoryService");
+        log.info("Inside createProduct of ProductService");
 
         return mapToProductDto(newProduct);
     }
@@ -56,15 +61,40 @@ public class ProductServiceImpl implements ProductService {
                 mapToProductDto(product)).collect(Collectors.toList());
     }
 
+//    @Override
+//    public List<ProductDto> getAllProduct() {
+//
+//        List<Product> products = productRepository.findAll();
+//
+//        log.info("Inside getAllProduct of CategoryService");
+//
+//        return products.stream().map(product ->
+//                mapToProductDto(product)).collect(Collectors.toList());
+//    }
+
     @Override
-    public List<ProductDto> getAllProduct() {
+    public ProductResponse getAllProduct(int pageNo, int pageSize, String sortBy, String sortDirection) {
+        //extracting sort direction
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending()
+                :Sort.by(sortBy).descending();
 
-        List<Product> products = productRepository.findAll();
+        //create pageable object
+        Pageable pageable = PageRequest.of(pageNo,pageSize, sort);
+        Page<Product> products = productRepository.findAll(pageable);
 
-        log.info("Inside getAllProduct of CategoryService");
+        //get content of page object
+        List<Product>productList = products.getContent();
 
-        return products.stream().map(product ->
-                mapToProductDto(product)).collect(Collectors.toList());
+        List<ProductDto>content= productList.stream().map(product -> mapToProductDto(product)).collect(Collectors.toList());
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(content);
+        productResponse.setPageSize(products.getSize());
+        productResponse.setTotalElements(products.getTotalElements());
+        productResponse.setLast(products.isLast());
+        productResponse.setTotalPages(products.getTotalPages());
+        productResponse.setPageNo(products.getNumber());
+
+        return productResponse;
     }
 
     @Override
@@ -83,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductServiceException(HttpStatus.BAD_REQUEST,"Product does not belong to this Category");
         }
 
-        log.info("Inside getProductById of CategoryService");
+        log.info("Inside getProductById of ProductService");
 
         return  mapToProductDto(product);
 
@@ -106,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product updatedProduct = productRepository.save(product);
 
-        log.info("Inside updateProduct of CategoryService");
+        log.info("Inside updateProduct of ProductService");
 
         return mapToProductDto(updatedProduct);
     }
@@ -124,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductServiceException(HttpStatus.BAD_REQUEST,"Product not from this Category");
         }
 
-        log.info("Inside deleteProduct of CategoryService");
+        log.info("Inside deleteProduct of ProductService");
 
         productRepository.delete(product);
 

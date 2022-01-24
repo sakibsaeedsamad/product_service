@@ -26,7 +26,8 @@ public class ResourceNotFoundException extends RuntimeException{
         return fieldName;
     }
 
-    public Long getFieldValue() {
+    public long getFieldValue() {
         return fieldValue;
     }
+
 }

@@ -23,10 +23,15 @@ public class Product {
             initialValue = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = GenerationType.AUTO,
             generator = "productId"
     )
-    public Long productId;
+//@Id
+//@GeneratedValue(
+//        strategy = GenerationType.IDENTITY,
+//        generator = "productId"
+//)
+    public long productId;
 
     @Column(nullable = false)
     public String productName;

@@ -22,9 +22,14 @@ public class Category {
             initialValue = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = GenerationType.AUTO,
             generator = "categoryId"
     )
+//@Id
+//@GeneratedValue(
+//        strategy = GenerationType.IDENTITY,
+//        generator = "categoryId"
+//    )
     private long categoryId;
 
     @Column(nullable = false)

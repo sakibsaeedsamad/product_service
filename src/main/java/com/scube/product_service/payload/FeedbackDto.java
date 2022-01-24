@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FeedbackDto {
 
-    private Long feedbackId;
+    private long feedbackId;
 
     private String feedbackRating;
     private String feedbackComment;

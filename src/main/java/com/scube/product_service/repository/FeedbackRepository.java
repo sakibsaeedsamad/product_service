@@ -12,5 +12,5 @@ import java.util.List;
 public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
 
     @Query("from Feedback where feedback_product_id = :productId")
-    List<Feedback> findByproductId (Long productId);
+    List<Feedback> findByproductId (long productId);
 }
