@@ -54,7 +54,7 @@ public class CategoryController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Category not found with id : categoryId",
-                    content = @Content),
+                    content = {@Content(mediaType = "application/json")}),
     })
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> findCategoryById(@PathVariable(name = "id") long categoryId) {
@@ -70,10 +70,10 @@ public class CategoryController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Category not found with id : categoryId",
-                    content = @Content),
+                    content = {@Content(mediaType = "application/json")}),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable(name = "id") long categoryId, @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable(name = "id") long categoryId,@Valid @RequestBody CategoryDto categoryDto) {
         log.info("Inside the updateCategoryById Controller");
         CategoryDto categoryDtoResponse =  categoryService.updateCategoryById(categoryId, categoryDto);
 
@@ -87,7 +87,7 @@ public class CategoryController {
                     content = {@Content(mediaType = "text/plain;charset=UTF-8")}),
             @ApiResponse(responseCode = "404",
                     description = "Category not found with id : categoryId",
-                    content = @Content),
+                    content = {@Content(mediaType = "application/json")}),
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable(name = "id") long categoryId) {

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,11 +34,11 @@ public class ProductController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Category not found with id : categoryId",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
     @PostMapping("/categories/{categoryId}/products")
     public ProductDto createProduct(@PathVariable("categoryId") long categoryId,
-                                    @RequestBody ProductDto productDto) {
+                                    @Valid @RequestBody ProductDto productDto) {
 
         log.info("Inside the createProduct Controller");
 
@@ -45,15 +46,11 @@ public class ProductController {
     }
 
 
-
     @Operation(summary = "This is to fetch All the Products stored in Db for a unique category.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Fetched All the Products form Db for a unique category.",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "404",
-                    description = "Not Available",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")})
     })
     @GetMapping("/categories/{categoryId}/products")
     public List<ProductDto> getAllProductByCategoryId(@PathVariable("categoryId") long categoryId) {
@@ -75,20 +72,17 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Fetched a page of Products form Db.",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "404",
-                    description = "NOt Available",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")})
     })
     //get All products rest api
     @GetMapping("/products")
-    public ProductResponse getAllProduct(@RequestParam(value = "pageNo",defaultValue = ProductPageConstraints.DEFAULT_PAGE_NUMBER,required = false) int  pageNo,
-                                         @RequestParam(value = "pageSize",defaultValue = ProductPageConstraints.DEFAULT_PAGE_SIZE,required = false) int  pageSize,
-                                         @RequestParam(value = "sortBy",defaultValue = ProductPageConstraints.DEFAULT_PAGE_SORT_BY,required = false) String  sortBy,
-                                         @RequestParam(value = "sortDir",defaultValue = ProductPageConstraints.DEFAULT_SORT_DIR,required = false) String  sortDir){
+    public ProductResponse getAllProduct(@RequestParam(value = "pageNo", defaultValue = ProductPageConstraints.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+                                         @RequestParam(value = "pageSize", defaultValue = ProductPageConstraints.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+                                         @RequestParam(value = "sortBy", defaultValue = ProductPageConstraints.DEFAULT_PAGE_SORT_BY, required = false) String sortBy,
+                                         @RequestParam(value = "sortDir", defaultValue = ProductPageConstraints.DEFAULT_SORT_DIR, required = false) String sortDir) {
         log.info("Inside the getAllProduct Controller");
 
-        return productService.getAllProduct(pageNo,pageSize,sortBy,sortDir);
+        return productService.getAllProduct(pageNo, pageSize, sortBy, sortDir);
     }
 
     @Operation(summary = "This is to fetch a unique product stored in Db for a unique Category.")
@@ -98,19 +92,19 @@ public class ProductController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Product not found with id : productId",
-                    content = @Content),
-            @ApiResponse(responseCode = "500",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
                     description = "Product not from this Category",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
     @GetMapping("/categories/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("categoryId") long categoryId,
-                                     @PathVariable("productId") long productId) {
+                                                     @PathVariable("productId") long productId) {
 
         log.info("Inside the getProductById Controller");
 
 
-        ProductDto productDtoResponse =  productService.getProductById(categoryId,productId);
+        ProductDto productDtoResponse = productService.getProductById(categoryId, productId);
 
         return new ResponseEntity<>(productDtoResponse, HttpStatus.OK);
     }
@@ -122,25 +116,24 @@ public class ProductController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Product not found with id : productId",
-                    content = @Content),
-            @ApiResponse(responseCode = "500",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
                     description = "Product not from this Category",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
 
     @PutMapping("/categories/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable("categoryId") long categoryId,
                                                     @PathVariable("productId") long productId,
-                                                    @RequestBody ProductDto productDto) {
+                                                    @Valid @RequestBody ProductDto productDto) {
 
         log.info("Inside the updateProduct Controller");
 
-        ProductDto productDtoResponse =  productService.updateProduct(categoryId, productId, productDto);
+        ProductDto productDtoResponse = productService.updateProduct(categoryId, productId, productDto);
 
         return new ResponseEntity<>(productDtoResponse, HttpStatus.OK);
 
     }
-
 
 
     @Operation(summary = "This is to delete a unique product stored in Db for a unique Category.")
@@ -150,15 +143,15 @@ public class ProductController {
                     content = {@Content(mediaType = "text/plain;charset=UTF-8")}),
             @ApiResponse(responseCode = "404",
                     description = "Product not found with id : productId",
-                    content = @Content),
-            @ApiResponse(responseCode = "500",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
                     description = "Product not from this Category",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
 
     @DeleteMapping("/categories/{categoryId}/products/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable("categoryId") long categoryId,
-                                    @PathVariable("productId") Long productId) {
+                                                @PathVariable("productId") Long productId) {
 
         log.info("Inside the deleteProduct Controller");
 
@@ -167,9 +160,6 @@ public class ProductController {
         return new ResponseEntity<>("Product Deleted Successfully", HttpStatus.OK);
 
     }
-
-
-
 
 
 }

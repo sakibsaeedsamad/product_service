@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -32,11 +33,11 @@ public class FeedbackController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Product not found with id : productId.",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
     @PostMapping("/products/{productId}/feedbacks")
     public FeedbackDto createFeedback(@PathVariable("productId") long productId,
-                                     @RequestBody FeedbackDto feedbackDto) {
+                                      @Valid @RequestBody FeedbackDto feedbackDto) {
         log.info("Inside the createFeedback Controller");
 
         return feedbackService.createFeedback(productId, feedbackDto);
@@ -47,9 +48,9 @@ public class FeedbackController {
             @ApiResponse(responseCode = "200",
                     description = "Fetched feedbacks stored in Db for a unique product.",
                     content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "500",
+            @ApiResponse(responseCode = "400",
                     description = "Feedback is not from this product",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
 
     @GetMapping("/products/{productId}/feedbacks")
@@ -68,20 +69,20 @@ public class FeedbackController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Feedback not found with id : feedbackId.",
-                    content = @Content),
-            @ApiResponse(responseCode = "500",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
                     description = "Feedback is not from this product.",
-                    content = @Content)
+                    content ={@Content(mediaType = "application/json")}),
     })
 
     @PutMapping("/products/{productId}/feedbacks/{feedbackId}")
     public ResponseEntity<FeedbackDto> updateFeedback(@PathVariable("productId") long productId,
-                                    @PathVariable("feedbackId") long feedbackId,
-                                    @RequestBody FeedbackDto feedbackDto) {
+                                                      @PathVariable("feedbackId") long feedbackId,
+                                                      @Valid @RequestBody FeedbackDto feedbackDto) {
 
         log.info("Inside the updateFeedback Controller");
 
-       FeedbackDto feedbackDtoResponse = feedbackService.updateFeedbackById(productId, feedbackId, feedbackDto);
+        FeedbackDto feedbackDtoResponse = feedbackService.updateFeedbackById(productId, feedbackId, feedbackDto);
         return new ResponseEntity<>(feedbackDtoResponse, HttpStatus.OK);
 
     }
@@ -93,15 +94,15 @@ public class FeedbackController {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
                     description = "Feedback not found with id : feedbackId.",
-                    content = @Content),
-            @ApiResponse(responseCode = "500",
+                    content ={@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
                     description = "Feedback is not from this product.",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
 
     @GetMapping("/products/{productId}/feedbacks/{feedbackId}")
     public ResponseEntity<FeedbackDto> getFeedbackById(@PathVariable("productId") long productId,
-                                                      @PathVariable("feedbackId") long feedbackId) {
+                                                       @PathVariable("feedbackId") long feedbackId) {
 
         log.info("Inside the updateFeedback Controller");
 
@@ -117,15 +118,15 @@ public class FeedbackController {
                     content = {@Content(mediaType = "text/plain;charset=UTF-8")}),
             @ApiResponse(responseCode = "404",
                     description = "Feedback not found with id : feedbackId.",
-                    content = @Content),
-            @ApiResponse(responseCode = "500",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
                     description = "Feedback is not from this product.",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json")}),
     })
 
     @DeleteMapping("/products/{productId}/feedbacks/{feedbackId}")
     public ResponseEntity<String> deleteFeedbackById(@PathVariable("productId") long productId,
-                                      @PathVariable("feedbackId") long feedbackId) {
+                                                     @PathVariable("feedbackId") long feedbackId) {
 
         log.info("Inside the deleteFeedbackById Controller");
 
