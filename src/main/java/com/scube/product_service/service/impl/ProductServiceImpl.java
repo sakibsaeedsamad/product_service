@@ -10,6 +10,7 @@ import com.scube.product_service.repository.CategoryRepository;
 import com.scube.product_service.repository.ProductRepository;
 import com.scube.product_service.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,8 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     LocalDateTime dateTime = LocalDateTime.now();
@@ -162,18 +165,23 @@ public class ProductServiceImpl implements ProductService {
 
 
     public Product mapToEntity(ProductDto productDto){
-        Product product = new Product();
-        product.setProductId(productDto.getProductId());
-        product.setProductName(productDto.getProductName());
-        product.setProductDescription(productDto.getProductDescription());
+
+        Product product = modelMapper.map(productDto,Product.class);
+
+//        Product product = new Product();
+//        product.setProductId(productDto.getProductId());
+//        product.setProductName(productDto.getProductName());
+//        product.setProductDescription(productDto.getProductDescription());
         return product;
     }
     public ProductDto mapToProductDto(Product product){
-        ProductDto productDto = new ProductDto();
-        productDto.setProductId(product.getProductId());
-        productDto.setProductName(product.getProductName());
-        productDto.setProductDescription(product.getProductDescription());
-        productDto.setProductCreateDate(product.getProductCreateDate());
+        ProductDto productDto = modelMapper.map(product,ProductDto.class);
+
+//        ProductDto productDto = new ProductDto();
+//        productDto.setProductId(product.getProductId());
+//        productDto.setProductName(product.getProductName());
+//        productDto.setProductDescription(product.getProductDescription());
+//        productDto.setProductCreateDate(product.getProductCreateDate());
         return productDto;
     }
 

@@ -3,9 +3,11 @@ package com.scube.product_service.service.impl;
 import com.scube.product_service.entity.Category;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.CategoryDto;
+import com.scube.product_service.payload.FeedbackDto;
 import com.scube.product_service.repository.CategoryRepository;
 import com.scube.product_service.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public CategoryDto saveCategory(CategoryDto categoryDto) {
@@ -73,18 +77,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    private CategoryDto mapToCategoryDto(Category category){;
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setCategoryId(category.getCategoryId());
-        categoryDto.setCategoryName(category.getCategoryName());
+    private CategoryDto mapToCategoryDto(Category category){
+
+        CategoryDto categoryDto = modelMapper.map(category,CategoryDto.class);
+
+//        CategoryDto categoryDto = new CategoryDto();
+//        categoryDto.setCategoryId(category.getCategoryId());
+//        categoryDto.setCategoryName(category.getCategoryName());
 
         return categoryDto;
     }
 
     private Category mapToEntity(CategoryDto categoryDto){
-        Category category = new Category();
-        category.setCategoryId(categoryDto.getCategoryId());
-        category.setCategoryName(categoryDto.getCategoryName());
+
+        Category category = modelMapper.map(categoryDto,Category.class);
+
+//        Category category = new Category();
+//        category.setCategoryId(categoryDto.getCategoryId());
+//        category.setCategoryName(categoryDto.getCategoryName());
         return category;
     }
 }

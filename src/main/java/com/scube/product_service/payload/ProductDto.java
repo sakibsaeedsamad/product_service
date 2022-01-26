@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 
 @Data
@@ -23,4 +24,6 @@ public class ProductDto {
     public String productDescription;
 
     public String productCreateDate;
+
+    private Set<FeedbackDto> feedbacks;
 }

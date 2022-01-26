@@ -5,10 +5,12 @@ import com.scube.product_service.entity.Product;
 import com.scube.product_service.exception.ProductServiceException;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.FeedbackDto;
+import com.scube.product_service.payload.ProductDto;
 import com.scube.product_service.repository.FeedbackRepository;
 import com.scube.product_service.repository.ProductRepository;
 import com.scube.product_service.service.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     ProductRepository productRepository;
     @Autowired
     FeedbackRepository feedbackRepository;
+    @Autowired
+    ModelMapper modelMapper;
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     LocalDateTime dateTime = LocalDateTime.now();
@@ -118,22 +122,28 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 
     public FeedbackDto mapToFeedbackDto(Feedback feedback){
-        FeedbackDto feedbackDto = new FeedbackDto();
 
-        feedbackDto.setFeedbackId(feedback.getFeedbackId());
-        feedbackDto.setFeedbackComment(feedback.getFeedbackComment());
-        feedbackDto.setFeedbackRating(feedback.getFeedbackRating());
-        feedbackDto.setFeedbackDate(feedback.getFeedbackDate());
-        feedbackDto.setFeedbackUserId(feedback.getFeedbackUserId());
+        FeedbackDto feedbackDto = modelMapper.map(feedback,FeedbackDto.class);
+
+//        FeedbackDto feedbackDto = new FeedbackDto();
+//
+//        feedbackDto.setFeedbackId(feedback.getFeedbackId());
+//        feedbackDto.setFeedbackComment(feedback.getFeedbackComment());
+//        feedbackDto.setFeedbackRating(feedback.getFeedbackRating());
+//        feedbackDto.setFeedbackDate(feedback.getFeedbackDate());
+//        feedbackDto.setFeedbackUserId(feedback.getFeedbackUserId());
 
         return feedbackDto;
     }
 
     public Feedback mapToEntity(FeedbackDto feedbackDto){
-        Feedback feedback = new Feedback();
-        feedback.setFeedbackComment(feedbackDto.getFeedbackComment());
-        feedback.setFeedbackRating(feedbackDto.getFeedbackRating());
-        feedback.setFeedbackUserId(feedbackDto.getFeedbackUserId());
+
+        Feedback feedback = modelMapper.map(feedbackDto,Feedback.class);
+
+//        Feedback feedback = new Feedback();
+//        feedback.setFeedbackComment(feedbackDto.getFeedbackComment());
+//        feedback.setFeedbackRating(feedbackDto.getFeedbackRating());
+//        feedback.setFeedbackUserId(feedbackDto.getFeedbackUserId());
 
         return  feedback;
     }
