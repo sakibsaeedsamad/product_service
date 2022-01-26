@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class CategoryController {
                     content = {@Content(mediaType = "application/json")}),
     })
     @PostMapping
-    public CategoryDto saveCategory(@RequestBody CategoryDto categoryDto) {
+    public CategoryDto saveCategory(@Valid @RequestBody CategoryDto categoryDto) {
         log.info("Inside the saveCategory Controller");
         return categoryService.saveCategory(categoryDto);
     }
