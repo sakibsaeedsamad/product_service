@@ -9,8 +9,6 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CategoryDto {
     private long categoryId;
 

@@ -1,15 +1,11 @@
 package com.scube.product_service.payload;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class FeedbackDto {
 
     private long feedbackId;
@@ -24,7 +20,7 @@ public class FeedbackDto {
 
     private String feedbackUserId;
 
-    public String feedbackDate;
+    private String feedbackDate;
 
 
 }
