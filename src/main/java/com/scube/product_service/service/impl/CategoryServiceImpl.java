@@ -3,14 +3,12 @@ package com.scube.product_service.service.impl;
 import com.scube.product_service.entity.Category;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.CategoryDto;
-import com.scube.product_service.payload.FeedbackDto;
 import com.scube.product_service.repository.CategoryRepository;
 import com.scube.product_service.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

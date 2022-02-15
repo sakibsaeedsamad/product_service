@@ -5,7 +5,6 @@ import com.scube.product_service.entity.Product;
 import com.scube.product_service.exception.ProductServiceException;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.FeedbackDto;
-import com.scube.product_service.payload.ProductDto;
 import com.scube.product_service.repository.FeedbackRepository;
 import com.scube.product_service.repository.ProductRepository;
 import com.scube.product_service.service.FeedbackService;
@@ -14,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
