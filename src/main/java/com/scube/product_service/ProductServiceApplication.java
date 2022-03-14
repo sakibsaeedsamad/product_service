@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableEurekaClient
 @OpenAPIDefinition(info = @Info(title = "Product Service APIs", version = "1.0", description = "E-Com Microservice"))
 public class ProductServiceApplication {
 

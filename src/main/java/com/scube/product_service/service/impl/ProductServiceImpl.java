@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,34 @@ public class ProductServiceImpl implements ProductService {
         log.info("Inside createProduct of ProductService");
 
         return mapToProductDto(newProduct);
+    }
+
+    @Override
+    public ArrayList<ProductDto> createMultipleProduct(long categoryId, ArrayList<ProductDto> productDto) {
+
+        ArrayList<ProductDto> productDto1 = new ArrayList<>();
+
+        for (int counter = 0; counter < productDto.size(); counter++) {
+
+            Product product = mapToEntity(productDto.get(counter));
+            Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category","id",categoryId));
+            product.setCategory(category);
+
+
+            product.setProductCreateDate(dateTime.toString());
+
+            //save Product to db
+            Product newProduct = productRepository.save(product);
+
+            log.info("Inside createProduct of ProductService");
+            productDto1.add(mapToProductDto(newProduct));
+        }
+
+
+
+
+
+        return productDto1;
     }
 
     @Override

@@ -1,0 +1,5 @@
+spring:
+    cloud:
+      config:
+        enabled: true
+        uri: http://10.11.201.180:9090
