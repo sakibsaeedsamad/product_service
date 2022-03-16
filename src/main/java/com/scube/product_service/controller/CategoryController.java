@@ -1,6 +1,7 @@
 package com.scube.product_service.controller;
 
 import com.scube.product_service.payload.CategoryDto;
+import com.scube.product_service.payload.ProductDto;
 import com.scube.product_service.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,11 +31,19 @@ public class CategoryController {
                     content = {@Content(mediaType = "application/json")}),
     })
     @PostMapping
-    public CategoryDto saveCategory(@Valid @RequestBody CategoryDto categoryDto) {
-        log.info("Inside the saveCategory Controller");
-        return categoryService.saveCategory(categoryDto);
-    }
+//    public CategoryDto saveCategory(@Valid @RequestBody CategoryDto categoryDto) {
+//        log.info("Inside the saveCategory Controller");
+//        return categoryService.saveCategory(categoryDto);
+//    }
 
+    //@PostMapping("/multiple")
+    public ArrayList<CategoryDto> createMultipleCategory(
+            @Valid @RequestBody ArrayList<CategoryDto> categoryDto) {
+
+        log.info("Inside the saveMultipleCategory Controller");
+
+        return categoryService.saveMultipleCategory(categoryDto);
+    }
 
     @Operation(summary = "This is to fetch all Categories from Db.")
     @ApiResponses(value = {

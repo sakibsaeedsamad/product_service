@@ -38,15 +38,15 @@ public class ProductController {
                     content = {@Content(mediaType = "application/json")}),
     })
     @PostMapping("/categories/{categoryId}/products")
-    public ProductDto createProduct(@PathVariable("categoryId") long categoryId,
-                                    @Valid @RequestBody ProductDto productDto) {
-
-        log.info("Inside the createProduct Controller");
-
-        return productService.createProduct(categoryId, productDto);
-    }
-
-    @PostMapping("/categories/{categoryId}/multipleproducts")
+//    public ProductDto createProduct(@PathVariable("categoryId") long categoryId,
+//                                    @Valid @RequestBody ProductDto productDto) {
+//
+//        log.info("Inside the createProduct Controller");
+//
+//        return productService.createProduct(categoryId, productDto);
+//    }
+//
+//    @PostMapping("/categories/{categoryId}/multipleproducts")
     public ArrayList<ProductDto> createMultipleProduct(@PathVariable("categoryId") long categoryId,
                                     @Valid @RequestBody ArrayList<ProductDto> productDto) {
 

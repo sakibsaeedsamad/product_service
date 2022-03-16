@@ -1,14 +1,18 @@
 package com.scube.product_service.service.impl;
 
 import com.scube.product_service.entity.Category;
+import com.scube.product_service.entity.Product;
 import com.scube.product_service.exception.ResourceNotFoundException;
 import com.scube.product_service.payload.CategoryDto;
+import com.scube.product_service.payload.ProductDto;
 import com.scube.product_service.repository.CategoryRepository;
 import com.scube.product_service.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,22 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Inside saveCategory of CategoryService");
 
         return newCategoryDto;
+    }
+
+    @Override
+    public ArrayList<CategoryDto> saveMultipleCategory(ArrayList<CategoryDto> categoryDto) {
+
+        ArrayList<CategoryDto> categoryDto1 = new ArrayList<>();
+
+        for (int counter = 0; counter < categoryDto.size(); counter++) {
+
+            Category category = mapToEntity(categoryDto.get(counter));
+            Category newCategory = categoryRepository.save(category);
+            log.info("Inside saveMultipleCategory of CategoryService");
+            categoryDto1.add(mapToCategoryDto(newCategory));
+        }
+
+        return categoryDto1;
     }
 
     @Override
